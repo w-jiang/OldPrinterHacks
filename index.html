@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Broke Kid's Printing Hack</title>
+  <meta name="description" content="Poor Kid's Printer">
+</head>
+
+<body>
+  <h3>Broke Kid's Printing Hack</h3>
+
+  <p>Input information to get pages to print.</p><br>
+
+  Starting Page Number: <input type="number" min=1 id="pageStart"><br>
+  Ending Page Number: <input type="number" min=1 id="pageEnd"><br>
+  Number of Pages per Sheet: <input type="number" min=1 id="pagesPerSheet"><br>
+  <!-- Skipped pages: <input type="text" id="skipPages"><br> -->
+
+  <input type="button" id="myBtn" onclick="calculatePages()" value="Submit">
+
+  <p id="frontPageOutput"></p>
+  <p id="backPageOutput"></p>
+  <p id="pagesTotal"></p>
+
+  <script>
+  function calculatePages() {
+      var pageStart = Number(document.getElementById("pageStart").value);
+      var pageEnd = Number(document.getElementById("pageEnd").value);
+      var pagesPerSheet = Number(document.getElementById("pagesPerSheet").value);
+      if (pageStart < 1 || pageEnd < 1 || pagesPerSheet < 1 || pageStart > pageEnd) {
+        window.alert("Input invalid.");
+        return false;
+      }
+
+      var frontPages;
+      var backPages;
+      var current = 0;
+
+      for (var i = pageStart; i <= pageEnd; i += pagesPerSheet) {
+        var curLastPage = ((i + pagesPerSheet - 1) <= pageEnd)? (i + pagesPerSheet - 1) : pageEnd ;
+        var pages = (i === curLastPage)? i : i + " - " + curLastPage;
+        if (current % 2 === 0) {
+          frontPages = (frontPages)? frontPages + ", " + pages : pages;
+        }
+        else {
+          backPages = (backPages)? backPages + ", " + pages : pages;
+        }
+        current++;
+      }
+      document.getElementById("frontPageOutput").innerHTML = (frontPages) ? "Front Pages: " + frontPages : "";
+      document.getElementById("backPageOutput").innerHTML = (backPages) ? "Back Pages: " + backPages : "";
+      document.getElementById("pagesTotal").innerHTML = "Total Pages: " + Math.ceil(current/2);
+  }
+  </script>
+</body>
+</html>
